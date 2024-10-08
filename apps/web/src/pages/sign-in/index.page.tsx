@@ -75,6 +75,9 @@ const SignIn: NextPage = () => {
             <Button type="submit" loading={isSignInPending} fullWidth mt={32}>
               Sign in
             </Button>
+            <Button type="submit" loading={isSignInPending} fullWidth mt={32}>
+              fgsidyfgisiyufgsuiyfgsdy
+            </Button>
           </form>
         </Stack>
 
