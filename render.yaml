@@ -7,6 +7,11 @@ services:
     buildFilter:
       paths:
         - apps/api/**
+    envVars:
+      - key: HOST
+        value: "0.0.0.0"
+      - key: PORT
+        value: "3001"
   - type: web
     name: js-vacancy-test-task-web
     runtime: docker
@@ -15,3 +20,8 @@ services:
     buildFilter:
       paths:
         - apps/web/**
+    envVars:
+      - key: HOST
+        value: "0.0.0.0"
+      - key: PORT
+        value: "3002"
