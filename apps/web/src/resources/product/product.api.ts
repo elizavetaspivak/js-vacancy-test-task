@@ -27,7 +27,6 @@ export const useCreateProduct = <T = FormData>() =>
   useMutation<Product, ApiError, T>({
     mutationFn: (data: T) => apiService.post('/product/upload', data),
     onSuccess: (data) => {
-      console.log(data, 'data');
       queryClient.setQueryData(['myproducts'], (prev: { results: Product[] }) => ({
         ...prev,
         results: [data, ...(prev.results || [])],
@@ -37,13 +36,13 @@ export const useCreateProduct = <T = FormData>() =>
       router.back();
     },
   });
-export const useDeleteProduct = <T extends { id: string }>() =>
+export const useDeleteProduct = <T extends { productId: string }>() =>
   useMutation<void, ApiError, T>({
     mutationFn: (data: T) => apiService.delete('/product/delete', data),
     onSuccess: (_, params: T) => {
       queryClient.setQueryData(['myproducts'], (prev: { results: Product[] }) => ({
         ...prev,
-        results: prev.results?.filter((product) => product._id !== params.id),
+        results: prev.results?.filter((product) => product._id !== params.productId),
       }));
       queryClient.invalidateQueries({
         queryKey: ['products'],
