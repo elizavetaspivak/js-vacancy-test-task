@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Box, Grid, Group, Skeleton } from '@mantine/core';
+import { Box, Group, Skeleton } from '@mantine/core';
 import { SortDirection } from '@tanstack/react-table';
 
 import { ProductResponce } from 'resources/product/product.api';

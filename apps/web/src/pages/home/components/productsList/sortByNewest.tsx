@@ -29,51 +29,50 @@ export const SortByNewest = ({
   setFilterPriceTo,
   sorting,
   setSorting,
-}: SortByNewestProps) => (
-  <Box>
-    <Flex align="center" justify="space-between">
-      <Box fw="bold">{products?.count} results</Box>
+}: SortByNewestProps) => {
+  const handleSort = () => {
+    setSorting(sorting === 'asc' ? 'desc' : 'asc');
+  };
 
-      <Stack>
-        <Flex justify="start">
-          <Box w="20px" mr="5px">
-            <SortIcon />
-          </Box>
-          <Box>Sort by newest</Box>
-          <ActionIcon
-            variant="transparent"
-            color="gray"
-            aria-label="Settings"
-            onClick={() => {
-              sorting === 'asc' ? setSorting('desc') : setSorting('asc');
-            }}
-          >
-            <Box w="16px">
-              <SortArrowIcon />
+  return (
+    <Box>
+      <Flex align="center" justify="space-between">
+        <Box fw="bold">{products?.count} results</Box>
+
+        <Stack>
+          <Flex justify="start">
+            <Box w="20px" mr="5px">
+              <SortIcon />
             </Box>
-          </ActionIcon>
-        </Flex>
-      </Stack>
-    </Flex>
-    <Box mt="15px">
-      {filterPriceFrom && filterPriceTo && (
-        <Box mb="20px">
-          <Pill
-            size="lg"
-            classNames={{
-              root: s.root,
-              remove: s.remove,
-            }}
-            withRemoveButton
-            onRemove={() => {
-              setFilterPriceFrom('');
-              setFilterPriceTo('');
-            }}
-          >
-            ${filterPriceFrom}-${filterPriceTo}
-          </Pill>
-        </Box>
-      )}
+            <Box>Sort by newest</Box>
+            <ActionIcon variant="transparent" color="gray" aria-label="Settings" onClick={handleSort}>
+              <Box w="16px">
+                <SortArrowIcon />
+              </Box>
+            </ActionIcon>
+          </Flex>
+        </Stack>
+      </Flex>
+      <Box mt="15px">
+        {filterPriceFrom && filterPriceTo && (
+          <Box mb="20px">
+            <Pill
+              size="lg"
+              classNames={{
+                root: s.root,
+                remove: s.remove,
+              }}
+              withRemoveButton
+              onRemove={() => {
+                setFilterPriceFrom('');
+                setFilterPriceTo('');
+              }}
+            >
+              ${filterPriceFrom}-${filterPriceTo}
+            </Pill>
+          </Box>
+        )}
+      </Box>
     </Box>
-  </Box>
-);
+  );
+};
