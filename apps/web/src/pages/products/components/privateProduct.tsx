@@ -1,20 +1,20 @@
 import React from 'react';
-import { Badge, Box, Card, Grid, Group, Image, Text, ThemeIcon, UnstyledButton } from '@mantine/core';
-import { Product } from 'app-types/src/product.types';
+import { Badge, Box, Card, Group, Image, Text, ThemeIcon, UnstyledButton } from '@mantine/core';
 
 import { useDeleteProduct, useUpdateProduct } from 'resources/product/product.api';
 
 import { DeleteProductIcon } from 'components/icons/deleteProductIcon';
 
 import { SaleStatus } from 'schemas/src/product.schema';
+import { Product } from 'types';
 
 type PrivateProductProps = {
   product: Product;
 };
 
 export const PrivateProduct = ({ product }: PrivateProductProps) => {
-  const { mutate: deleteProduct, isPending } = useDeleteProduct();
-  const { mutate: updateProduct, isPending: isUpdate } = useUpdateProduct();
+  const { mutate: deleteProduct } = useDeleteProduct();
+  const { mutate: updateProduct } = useUpdateProduct();
 
   return (
     <Card w="270px" h="266px" shadow="sm" padding="xs" radius="md" withBorder key={product._id}>

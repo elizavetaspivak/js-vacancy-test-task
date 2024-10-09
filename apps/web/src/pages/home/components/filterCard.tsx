@@ -9,7 +9,7 @@ type FilterCardProps = {
   filterPriceTo: string | null;
   setFilterPriceFrom: React.Dispatch<React.SetStateAction<string>>;
   setFilterPriceTo: React.Dispatch<React.SetStateAction<string>>;
-  setSearch: (value: string | ChangeEvent<any> | null | undefined) => void;
+  setSearch: (value: string | ChangeEvent<never> | null | undefined) => void;
 };
 
 const theme = createTheme({

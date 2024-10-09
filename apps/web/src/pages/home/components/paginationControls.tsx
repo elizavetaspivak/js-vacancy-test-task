@@ -1,5 +1,5 @@
-import { Box, Pagination } from '@mantine/core';
 import React from 'react';
+import { Box, Pagination } from '@mantine/core';
 
 type PaginationControlsProps = {
   pagesCount: number | undefined;
@@ -8,16 +8,16 @@ type PaginationControlsProps = {
 };
 
 export const PaginationControls = ({ pagesCount, page, setPage }: PaginationControlsProps) => {
-  const handleChangePage = (page: number) => {
-    setPage(page);
+  const handleChangePage = (newPage: number) => {
+    setPage(newPage);
   };
 
   return (
-    <Box mt={'20px'} mb={'20px'}>
+    <Box mt="20px" mb="20px">
       {pagesCount && pagesCount > 1 && (
         <Pagination
           style={{ width: '10em', marginLeft: 'auto', marginRight: 'auto' }}
-          color={'blue'}
+          color="blue"
           total={pagesCount}
           value={page}
           onChange={handleChangePage}

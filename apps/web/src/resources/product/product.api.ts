@@ -1,6 +1,5 @@
 import router from 'next/router';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Product } from 'app-types/src/product.types';
 
 import { sendNotification } from 'components/notifications/notification';
 
@@ -9,7 +8,7 @@ import { apiService } from 'services';
 import queryClient from 'query-client';
 
 import { SaleStatus } from 'schemas/src/product.schema';
-import { ApiError, ListResult } from 'types';
+import { ApiError, ListResult, Product } from 'types';
 
 export type ProductResponce = {
   _id: string;

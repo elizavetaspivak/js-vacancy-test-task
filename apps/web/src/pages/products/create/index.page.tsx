@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import router from 'next/router';
 import { Box, Button, Group, Image, Stack, TextInput, Title } from '@mantine/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
