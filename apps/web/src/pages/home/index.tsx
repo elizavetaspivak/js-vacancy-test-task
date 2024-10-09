@@ -1,68 +1,111 @@
-import React from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import { Stack, Title } from '@mantine/core';
-import { useSetState } from '@mantine/hooks';
-import { showNotification } from '@mantine/notifications';
+import { Group, Stack } from '@mantine/core';
+import { useDebouncedValue, useInputState } from '@mantine/hooks';
 import { SortDirection } from '@tanstack/react-table';
-import { pick } from 'lodash';
 
-import { userApi, UsersListParams } from 'resources/user';
+import { productApi } from 'resources/product';
 
-import { Table } from 'components';
+import { ListParams, SortOrder } from 'types';
 
-import { User } from 'types';
+import { FilterCard } from './components/filterCard';
+import { PaginationControls } from './components/paginationControls';
+import { ProductsList } from './components/productsList/productsList';
+import { SearchProducts } from './components/searchProducts';
+import { PER_PAGE } from './constants';
 
-import Filters from './components/Filters';
-import { COLUMNS, DEFAULT_PAGE, DEFAULT_PARAMS, EXTERNAL_SORT_FIELDS, PER_PAGE } from './constants';
-
-const Home: NextPage = () => {
-  const [params, setParams] = useSetState<UsersListParams>(DEFAULT_PARAMS);
-
-  const { data: users, isLoading: isUserLostLoading } = userApi.useList(params);
-
-  const onSortingChange = (sort: Record<string, SortDirection>) => {
-    setParams((prev) => {
-      const combinedSort = { ...pick(prev.sort, EXTERNAL_SORT_FIELDS), ...sort };
-
-      return { sort: combinedSort };
-    });
+type FilterParams = {
+  price?: {
+    from: number;
+    to: number;
   };
+};
 
-  const onRowClick = (user: User) => {
-    showNotification({
-      title: 'Success',
-      message: `You clicked on the row for the user with the email address ${user.email}.`,
-      color: 'green',
-    });
-  };
+type SortParams = {
+  createdOn?: SortOrder;
+};
+
+export type ProductsListParams = ListParams<FilterParams, SortParams>;
+
+const Marketplace: NextPage = () => {
+  const [search, setSearch] = useInputState<string>('');
+  const [page, setPage] = useState<number>(1);
+  const [filterPriceFrom, setFilterPriceFrom] = useState<string>('');
+  const [filterPriceTo, setFilterPriceTo] = useState<string>('');
+
+  const [params, setParams] = useState<ProductsListParams>({
+    page: 1,
+    perPage: 5,
+  });
+
+  const [sorting, setSorting] = useState<SortDirection>('asc');
+
+  const [debouncedSearch] = useDebouncedValue(search, 500);
+  const { data: products, isLoading: isProductListLoading } = productApi.useGetProducts({ ...params });
+
+  useLayoutEffect(() => {
+    if (!filterPriceFrom) {
+      setParams((prev) => ({
+        ...prev,
+        filter: {},
+      }));
+    }
+
+    if (filterPriceTo) {
+      setParams((prev) => ({
+        ...prev,
+        filter: { price: { from: +filterPriceFrom, to: +filterPriceTo } },
+      }));
+    }
+  }, [filterPriceFrom, filterPriceTo]);
+
+  useLayoutEffect(() => {
+    setParams((prev) => ({ ...prev, page: 1, searchValue: debouncedSearch, perPage: PER_PAGE }));
+  }, [debouncedSearch]);
+
+  useLayoutEffect(() => {
+    setParams((prev) => ({ ...prev, page, perPage: PER_PAGE }));
+  }, [page]);
+
+  useLayoutEffect(() => {
+    setParams((prev) => ({
+      ...prev,
+      sort: sorting === 'asc' ? { createdOn: 'asc' } : { createdOn: 'desc' },
+    }));
+  }, [sorting]);
 
   return (
     <>
       <Head>
-        <title>Users</title>
+        <title>Marketplace</title>
       </Head>
 
-      <Stack gap="lg">
-        <Title order={2}>Users</Title>
-
-        <Filters setParams={setParams} />
-
-        <Table<User>
-          data={users?.results}
-          totalCount={users?.count}
-          pageCount={users?.pagesCount}
-          page={DEFAULT_PAGE}
-          perPage={PER_PAGE}
-          columns={COLUMNS}
-          isLoading={isUserLostLoading}
-          onPageChange={(page) => setParams({ page })}
-          onSortingChange={onSortingChange}
-          onRowClick={onRowClick}
+      <Group gap={28} align="flex-start" wrap="nowrap">
+        <FilterCard
+          setSearch={setSearch}
+          filterPriceTo={filterPriceTo}
+          filterPriceFrom={filterPriceFrom}
+          setFilterPriceFrom={setFilterPriceFrom}
+          setFilterPriceTo={setFilterPriceTo}
         />
-      </Stack>
+        <Stack gap={20} flex={1}>
+          <SearchProducts setSearch={setSearch} search={search} isProductListLoading={isProductListLoading} />
+          <ProductsList
+            sorting={sorting}
+            setSorting={setSorting}
+            products={products}
+            filterPriceFrom={filterPriceFrom}
+            filterPriceTo={filterPriceTo}
+            isProductListLoading={isProductListLoading}
+            setFilterPriceTo={setFilterPriceTo}
+            setFilterPriceFrom={setFilterPriceFrom}
+          />
+          <PaginationControls page={page} pagesCount={products?.pagesCount} setPage={setPage} />
+        </Stack>
+      </Group>
     </>
   );
 };
 
-export default Home;
+export default Marketplace;

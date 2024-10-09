@@ -20,7 +20,7 @@ import '@mantine/notifications/styles.layer.css';
 const App: FC<AppProps> = ({ Component, pageProps }) => (
   <>
     <Head>
-      <title>Ship</title>
+      <title>Shopy</title>
     </Head>
 
     <QueryClientProvider client={queryClient}>

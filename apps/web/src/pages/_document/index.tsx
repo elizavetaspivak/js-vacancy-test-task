@@ -5,7 +5,7 @@ import { ColorSchemeScript } from '@mantine/core';
 const Document = () => (
   <Html>
     <Head>
-      <link rel="icon" href="/favicon.ico" />
+      <link rel="icon" href="/favicon.png" />
       <ColorSchemeScript defaultColorScheme="auto" />
     </Head>
     <body>

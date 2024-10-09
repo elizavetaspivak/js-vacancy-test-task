@@ -1,0 +1,15 @@
+.root{
+    border: 1px solid grey;
+    background-color: white;
+}
+
+.remove{
+    padding: 4px;
+    border-radius: 50px;
+    height: 20px;
+    background-color: gray;
+    color: white;
+    min-width: 20px;
+    background-clip: content-box;
+    margin-right: 5px;
+}

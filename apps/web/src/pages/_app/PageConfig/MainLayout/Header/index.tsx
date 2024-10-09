@@ -8,7 +8,7 @@ import { LogoImage } from 'public/images';
 
 import { RoutePath } from 'routes';
 
-import ShadowLoginBanner from './components/ShadowLoginBanner';
+import HeaderMenu from './components/HeaderMenu';
 import UserMenu from './components/UserMenu';
 
 const Header: FC = () => {
@@ -17,13 +17,13 @@ const Header: FC = () => {
   if (!account) return null;
 
   return (
-    <AppShell.Header>
-      {account.isShadow && <ShadowLoginBanner email={account.email} />}
-
-      <Group h={72} px={32} py={0} justify="space-between" bg="white">
+    <AppShell.Header h={90} bg="#FCFCFC" style={{ border: 'none' }}>
+      <Group h={72} px={48} py={16} justify="space-between" bg="#FCFCFC">
         <Anchor component={Link} href={RoutePath.Home}>
           <LogoImage />
         </Anchor>
+
+        <HeaderMenu />
 
         <UserMenu />
       </Group>

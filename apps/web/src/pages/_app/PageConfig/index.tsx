@@ -3,16 +3,10 @@ import { useRouter } from 'next/router';
 
 import { accountApi } from 'resources/account';
 
-import { analyticsService } from 'services';
-
 import { LayoutType, RoutePath, routesConfiguration, ScopeType } from 'routes';
-import config from 'config';
 
 import MainLayout from './MainLayout';
-import PrivateScope from './PrivateScope';
 import UnauthorizedLayout from './UnauthorizedLayout';
-
-import 'resources/user/user.handlers';
 
 const layoutToComponent = {
   [LayoutType.MAIN]: MainLayout,
@@ -21,7 +15,7 @@ const layoutToComponent = {
 
 const scopeToComponent = {
   [ScopeType.PUBLIC]: Fragment,
-  [ScopeType.PRIVATE]: PrivateScope,
+  [ScopeType.PRIVATE]: Fragment,
 };
 
 interface PageConfigProps {
@@ -30,15 +24,7 @@ interface PageConfigProps {
 
 const PageConfig: FC<PageConfigProps> = ({ children }) => {
   const { route, push } = useRouter();
-  const { data: account, isLoading: isAccountLoading } = accountApi.useGet({
-    onSettled: () => {
-      if (!config.MIXPANEL_API_KEY) return;
-
-      analyticsService.init();
-
-      analyticsService.setUser(account);
-    },
-  });
+  const { data: account, isLoading: isAccountLoading } = accountApi.useGet();
 
   if (isAccountLoading) return null;
 
