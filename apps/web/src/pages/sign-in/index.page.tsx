@@ -9,8 +9,6 @@ import { z } from 'zod';
 
 import { accountApi } from 'resources/account';
 
-import { handleApiError } from 'utils';
-
 import { RoutePath } from 'routes';
 
 import { signInSchema } from 'schemas';
@@ -22,15 +20,11 @@ const SignIn: NextPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-    setError,
   } = useForm<SignInParams>({ resolver: zodResolver(signInSchema) });
 
   const { mutate: signIn, isPending: isSignInPending } = accountApi.useSignIn<SignInParams>();
 
-  const onSubmit = (data: SignInParams) =>
-    signIn(data, {
-      onError: (e) => handleApiError(e, setError),
-    });
+  const onSubmit = (data: SignInParams) => signIn(data);
 
   return (
     <>

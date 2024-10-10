@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import { Box, Button, Card, createTheme, Flex, Input, MantineProvider } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
 
@@ -9,7 +9,6 @@ type FilterCardProps = {
   filterPriceTo: string | null;
   setFilterPriceFrom: React.Dispatch<React.SetStateAction<string>>;
   setFilterPriceTo: React.Dispatch<React.SetStateAction<string>>;
-  setSearch: (value: string | ChangeEvent<never> | null | undefined) => void;
 };
 
 const theme = createTheme({
@@ -28,7 +27,6 @@ export const FilterCard = ({
   filterPriceTo,
   setFilterPriceTo,
   filterPriceFrom,
-  setSearch,
 }: FilterCardProps) => (
   <Box>
     <MantineProvider theme={theme}>
@@ -47,7 +45,6 @@ export const FilterCard = ({
               onClick={() => {
                 setFilterPriceFrom('');
                 setFilterPriceTo('');
-                setSearch('');
               }}
             >
               Reset All

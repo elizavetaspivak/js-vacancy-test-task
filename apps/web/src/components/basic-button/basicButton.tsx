@@ -4,6 +4,7 @@ import { Button, ButtonProps } from '@mantine/core';
 
 type BasicButtonProps = ButtonProps & {
   width?: number | string;
+  disabled?: boolean;
   marginTop?: number | string;
   backGroundColor?: string;
   variant: string;
@@ -18,10 +19,12 @@ export const BasicButton: NextPage<BasicButtonProps> = ({
   variant,
   width,
   text,
+  disabled,
   isLoading,
   onClick,
 }) => (
   <Button
+    disabled={disabled}
     onClick={onClick}
     type="submit"
     mt={marginTop}

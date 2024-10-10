@@ -17,7 +17,7 @@ export const PrivateProduct = ({ product }: PrivateProductProps) => {
   const { mutate: updateProduct } = useUpdateProduct();
 
   return (
-    <Card w="270px" h="266px" shadow="sm" padding="xs" radius="md" withBorder key={product._id}>
+    <Card w="270px" h="300px" shadow="sm" padding="xs" radius="md" withBorder key={product._id}>
       <Card.Section style={{ position: 'relative' }}>
         <UnstyledButton
           style={{ position: 'absolute', top: 10, right: 10 }}
@@ -57,12 +57,20 @@ export const PrivateProduct = ({ product }: PrivateProductProps) => {
         </Text>
       </Group>
 
-      <Group justify="space-between" mt="sm" mb="xs">
+      <Group justify="space-between" mt="sm">
         <Text fw={500} style={{ fontSize: '14px' }} size="sm" c="dimmed">
           Price:
         </Text>
         <Text style={{ fontSize: '20px' }} fw={700} size="sm">
           ${product.price}
+        </Text>
+      </Group>
+      <Group justify="space-between" mb="xs">
+        <Text fw={500} style={{ fontSize: '14px' }} size="sm" c="dimmed">
+          Quantity:
+        </Text>
+        <Text style={{ fontSize: '20px' }} fw={700} size="sm">
+          {product.quantity}
         </Text>
       </Group>
     </Card>

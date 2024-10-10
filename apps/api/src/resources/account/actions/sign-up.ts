@@ -1,7 +1,6 @@
 import { userService } from 'resources/user';
 
 import { validateMiddleware } from 'middlewares';
-import { authService } from 'services';
 import { securityUtil } from 'utils';
 
 import { signUpSchema } from 'schemas';
@@ -24,14 +23,12 @@ async function handler(ctx: AppKoaContext<SignUpParams>) {
 
   const hash = await securityUtil.getHash(password);
 
-  const user = await userService.insertOne({
+  await userService.insertOne({
     email,
     passwordHash: hash,
   });
 
-  await Promise.all([userService.updateLastRequest(user._id), authService.setTokens(ctx, user._id)]);
-
-  ctx.body = userService.getPublic(user);
+  ctx.status = 204;
 }
 
 export default (router: AppRouter) => {

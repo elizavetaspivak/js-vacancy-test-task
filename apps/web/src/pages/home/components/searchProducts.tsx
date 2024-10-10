@@ -3,21 +3,23 @@ import { ActionIcon, Skeleton, TextInput } from '@mantine/core';
 import { useDebouncedValue, useInputState } from '@mantine/hooks';
 import { IconSearch, IconX } from '@tabler/icons-react';
 
+import { ProductsListParams } from 'types';
+
 import classes from '../index.module.css';
 
 type SearchProductsProps = {
-  search: string;
+  params: ProductsListParams;
+  setParams: (params: ProductsListParams) => void;
   isProductListLoading: boolean;
-  setSearch: (value: string) => void;
 };
 
-export const SearchProducts = ({ isProductListLoading, setSearch, search }: SearchProductsProps) => {
-  const [searchProduct, setSearchProduct] = useInputState('');
+export const SearchProducts = ({ isProductListLoading, setParams, params }: SearchProductsProps) => {
+  const [search, setSearch] = useInputState('');
 
-  const [debouncedSearch] = useDebouncedValue(searchProduct, 500);
+  const [debouncedSearch] = useDebouncedValue(search, 500);
 
   useLayoutEffect(() => {
-    setSearch(searchProduct);
+    setParams({ ...params, searchValue: debouncedSearch });
   }, [debouncedSearch]);
 
   return (
@@ -26,12 +28,12 @@ export const SearchProducts = ({ isProductListLoading, setSearch, search }: Sear
         w="100%"
         size="md"
         value={search}
-        onChange={setSearchProduct}
+        onChange={setSearch}
         placeholder="Type to search"
         leftSection={<IconSearch size={16} />}
         rightSection={
           search && (
-            <ActionIcon variant="transparent" onClick={() => setSearchProduct('')}>
+            <ActionIcon variant="transparent" onClick={() => setSearch('')}>
               <IconX color="gray" stroke={1} />
             </ActionIcon>
           )

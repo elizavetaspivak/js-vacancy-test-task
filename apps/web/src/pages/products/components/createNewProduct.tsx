@@ -17,7 +17,7 @@ export const CreateNewProduct = () => (
         cursor: 'pointer',
       }}
       w="270px"
-      h="266px"
+      h="300px"
       shadow="md"
       padding="lg"
       radius="md"

@@ -22,3 +22,16 @@ export type ListParams<T, F> = {
   filter?: T;
   sort?: SortParams<F>;
 };
+
+type FilterParams = {
+  price?: {
+    from: number;
+    to: number;
+  };
+};
+
+type SortParamsProduct = {
+  createdOn?: SortOrder;
+};
+
+export type ProductsListParams = ListParams<FilterParams, SortParamsProduct>;

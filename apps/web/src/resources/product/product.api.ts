@@ -31,7 +31,7 @@ export const useCreateProduct = <T = FormData>() =>
         results: [data, ...(prev.results || [])],
       }));
       queryClient.invalidateQueries({ queryKey: ['products'] });
-      sendNotification('Everything is okay', 'Your product was created successfully', 'teal');
+      sendNotification('Success', 'Your product was created successfully', 'teal');
       router.back();
     },
   });
@@ -46,7 +46,14 @@ export const useDeleteProduct = <T extends { productId: string }>() =>
       queryClient.invalidateQueries({
         queryKey: ['products'],
       });
-      sendNotification('Everything is okay', 'Your product was deleted successfully', 'teal');
+      queryClient.invalidateQueries({
+        queryKey: ['cartCount'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['cart'],
+      });
+
+      sendNotification('Success', 'Your product was deleted successfully', 'teal');
     },
   });
 
@@ -58,7 +65,7 @@ export const useUpdateProduct = <T extends { id: string; saleStatus: SaleStatus 
         ...prev,
         results: prev.results.map((product) => (product._id === item._id ? item : product)),
       }));
-      sendNotification('Everything is okay', 'Your product was updated successfully', 'teal');
+      sendNotification('Success', 'Your product was updated successfully', 'teal');
     },
   });
 

@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import { Box, Button, Group, Image, Stack, TextInput, Title } from '@mantine/core';
+import { Alert, Box, Button, Group, Image, Stack, TextInput, Title } from '@mantine/core';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { IconAlertCircle } from '@tabler/icons-react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -18,6 +19,7 @@ const schema = z.object({
   file: z.any(),
   title: z.string().min(1, 'Title is required'),
   price: z.number().int().positive(),
+  quantity: z.number().int().positive(),
 });
 
 type CreateNewProductParams = z.infer<typeof schema>;
@@ -33,7 +35,7 @@ const CreateProduct: NextPage = () => {
     formState: { errors },
     resetField,
   } = useForm<CreateNewProductParams>({
-    resolver: zodResolver(createSchema.extend({ file: z.instanceof(File) })),
+    resolver: zodResolver(createSchema.extend({ file: z.instanceof(File, { message: 'Cannot be empty' }) })),
   });
 
   const hiddenInputRef = useRef<HTMLInputElement | null>(null);
@@ -54,6 +56,7 @@ const CreateProduct: NextPage = () => {
 
     formData.append('title', data.title);
     formData.append('price', data.price.toString());
+    formData.append('quantity', data.quantity.toString());
     formData.append('file', file, file.name);
 
     createNewProduct(formData, {
@@ -61,6 +64,7 @@ const CreateProduct: NextPage = () => {
         setFile(null);
         resetField('price');
         resetField('title');
+        resetField('quantity');
       },
     });
   };
@@ -121,7 +125,11 @@ const CreateProduct: NextPage = () => {
                 )}
               />
             </Group>
-
+            {errors.file && (
+              <Alert icon={<IconAlertCircle />} color="red">
+                {errors.file.message?.toString()}
+              </Alert>
+            )}
             <TextInput
               {...register('title')}
               label="Title of the product"
@@ -137,26 +145,46 @@ const CreateProduct: NextPage = () => {
               {...register('price', { valueAsNumber: true })}
               label="Price"
               pt="5px"
-              w="100%"
-              withErrorStyles={false}
               type="number"
+              withErrorStyles={false}
               placeholder="Enter price of the product"
               error={errors.price?.message}
+              onKeyDown={(event) => {
+                if (['e', 'E', '+', '-'].includes(event.key)) {
+                  event.preventDefault();
+                }
+              }}
               radius="md"
+              w="100%"
             />
+            <TextInput
+              {...register('quantity', { valueAsNumber: true })}
+              label="Quantity"
+              pt="5px"
+              type="number"
+              withErrorStyles={false}
+              placeholder="Enter quantity of the product"
+              error={errors.quantity?.message}
+              onKeyDown={(event) => {
+                if (['e', 'E', '+', '-'].includes(event.key)) {
+                  event.preventDefault();
+                }
+              }}
+              radius="md"
+              w="100%"
+            />
+            <Button
+              style={{ display: 'flex', justifyContent: 'center', marginLeft: 'auto' }}
+              type="submit"
+              mt="28px"
+              w="21%"
+              bg="#2B77EB"
+              loading={isCreateNewProductPending}
+              variant="filled"
+            >
+              Upload Product
+            </Button>
           </Stack>
-
-          <Button
-            style={{ display: 'flex', justifyContent: 'center', marginLeft: 'auto' }}
-            type="submit"
-            mt="28px"
-            w="21%"
-            bg="#2B77EB"
-            loading={isCreateNewProductPending}
-            variant="filled"
-          >
-            Upload Product
-          </Button>
         </form>
       </Stack>
     </>

@@ -7,7 +7,7 @@ type ValidationErrors = {
   [name: string]: string[] | string;
 };
 
-interface ErrorData {
+export interface ErrorData {
   errors?: ValidationErrors;
 }
 

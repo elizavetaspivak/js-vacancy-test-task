@@ -15,6 +15,7 @@ const schema = z.object({
   file: z.any(),
   title: z.string().min(1, 'Title is required'),
   price: z.string(),
+  quantity: z.string(),
 });
 
 type ValidatedData = z.infer<typeof schema>;
@@ -38,21 +39,20 @@ async function validator(ctx: AppKoaContext<ValidatedData>, next: Next) {
 async function handler(ctx: AppKoaContext<ValidatedData>) {
   const { user } = ctx.state;
   const { file } = ctx.request;
-  const { title, price } = ctx.validatedData;
+  const { title, price, quantity } = ctx.validatedData;
 
   const photoUrl = await uploadPhoto(file, ctx);
 
   if (photoUrl) {
-    const data = await productService.insertOne({
+    ctx.body = await productService.insertOne({
       title,
       saleStatus: SaleStatus.ON_SALE,
       price: +price,
+      quantity: +quantity,
       userId: user._id,
       imageUrl: photoUrl,
       fileReference: file.originalname,
     });
-
-    ctx.body = data;
   }
 }
 

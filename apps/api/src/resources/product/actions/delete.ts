@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import cartService from 'resources/cart/cart.service';
+
 import { validateMiddleware } from 'middlewares';
 
 import { AppKoaContext, AppRouter, Next } from 'types';
@@ -28,6 +30,12 @@ async function validator(ctx: AppKoaContext<ValidatedData>, next: Next) {
 
 async function handler(ctx: AppKoaContext<ValidatedData>) {
   const { productId } = ctx.validatedData;
+
+  const isCartExists = await cartService.exists({ productId });
+
+  if (isCartExists) {
+    await cartService.deleteOne({ productId });
+  }
 
   await productService.deleteOne({ _id: productId });
 
