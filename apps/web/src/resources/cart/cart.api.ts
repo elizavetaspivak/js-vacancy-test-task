@@ -34,6 +34,7 @@ export const useCreateCart = <T>() =>
     mutationFn: (data: T) => apiService.post('/cart/create', data),
     onSuccess: () => {
       sendNotification('Success', 'Your product was added to cart', 'teal');
+      queryClient.invalidateQueries({ queryKey: ['products'] });
     },
   });
 
