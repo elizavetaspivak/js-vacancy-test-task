@@ -29,7 +29,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
   const { user } = ctx.state;
   const { page = 1, perPage = 5, sort, filter, searchValue } = ctx.validatedData;
 
-  const filterOptions: { [key: string]: any }[] = [{ saleStatus: SaleStatus.ON_SALE }];
+  const filterOptions: { [key: string]: any }[] = [{ saleStatus: SaleStatus.ON_SALE, userId: { $ne: user._id } }];
 
   if (searchValue) {
     const searchPattern = stringUtil.escapeRegExpString(searchValue as string);

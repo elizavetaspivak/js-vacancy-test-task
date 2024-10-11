@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { Box, Group, Skeleton } from '@mantine/core';
+import { Box, Center, Group, Skeleton, Text } from '@mantine/core';
 import { SortDirection } from '@tanstack/react-table';
 
 import { ProductResponce } from 'resources/product/product.api';
@@ -52,6 +52,13 @@ export const ProductsList = memo(
         {products?.products?.results?.map((p) => (
           <Product product={p} cartProductIds={products?.cartProductIds} key={p._id} />
         ))}
+        {products && products.products.results.length === 0 && (
+          <Center w="100%">
+            <Text mt={40} c="black-600" fw="bold" size="xl">
+              No products found
+            </Text>
+          </Center>
+        )}
       </Group>
     </Box>
   ),
