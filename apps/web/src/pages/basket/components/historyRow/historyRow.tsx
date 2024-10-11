@@ -16,8 +16,8 @@ const HistoryRow: NextPage<{ cart: CardResponce }> = ({ cart }) => {
     <Table.Tr key={cart.product.title}>
       <Table.Td w="900px">
         <Flex align="center" justify="flex-start">
-          <Box className={classes.imageBox}>
-            <Image fit="cover" m="0 auto" w={80} h={80} className={classes.image} src={cart.product.imageUrl} />
+          <Box w={80} h={80} className={classes.imageBox}>
+            <Image src={cart.product.imageUrl} alt="Product" width={80} height={80} />
           </Box>
           <Box ml="20px" fw="bold" fz="16px">
             {cart.product.title}

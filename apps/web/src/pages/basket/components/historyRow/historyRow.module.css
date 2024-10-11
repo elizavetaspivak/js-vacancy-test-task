@@ -1,9 +1,10 @@
-.imageBox{
-    width: 80px;
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.imageBox {
+    border-radius: 8px;
+    overflow: hidden;
+
+    img {
+        object-fit: cover;
+    }
 }
 
 .image{
