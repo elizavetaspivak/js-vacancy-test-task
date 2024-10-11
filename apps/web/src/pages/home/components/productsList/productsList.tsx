@@ -13,7 +13,7 @@ type ProductsListProps = {
   sorting: string;
   setSorting: React.Dispatch<React.SetStateAction<SortDirection>>;
   isProductListLoading: boolean;
-  products: ListResult<ProductResponce> | undefined;
+  products: { products: ListResult<ProductResponce>; cartProductIds: string[] } | undefined;
   filterPriceFrom: string;
   filterPriceTo: string;
   setFilterPriceFrom: React.Dispatch<React.SetStateAction<string>>;
@@ -37,7 +37,7 @@ export const ProductsList = memo(
         sorting={sorting}
         setFilterPriceFrom={setFilterPriceFrom}
         setFilterPriceTo={setFilterPriceTo}
-        products={products}
+        products={products?.products}
         filterPriceFrom={filterPriceFrom}
         filterPriceTo={filterPriceTo}
       />
@@ -49,7 +49,9 @@ export const ProductsList = memo(
             ))}
           </>
         )}
-        {products?.results?.map((p) => <Product product={p} key={p._id} />)}
+        {products?.products?.results?.map((p) => (
+          <Product product={p} cartProductIds={products?.cartProductIds} key={p._id} />
+        ))}
       </Group>
     </Box>
   ),

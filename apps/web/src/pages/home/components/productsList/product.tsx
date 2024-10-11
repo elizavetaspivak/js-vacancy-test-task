@@ -10,9 +10,10 @@ import queryClient from 'query-client';
 
 type ProductProps = {
   product: ProductResponce;
+  cartProductIds: string[] | undefined;
 };
 
-export const Product = ({ product }: ProductProps) => {
+export const Product = ({ product, cartProductIds }: ProductProps) => {
   const { mutate: createCart } = useCreateCart();
 
   const handleCreateCart = (id: string) => {
@@ -25,6 +26,9 @@ export const Product = ({ product }: ProductProps) => {
       },
     );
   };
+
+  const isCreatedInCart = cartProductIds?.find((cartProductId) => cartProductId === product._id);
+
   return (
     <Card padding="md" bg="white" radius="12px" withBorder bd="1px solid black-100" w={318} key={product._id}>
       <Card.Section style={{ position: 'relative' }}>
@@ -47,10 +51,11 @@ export const Product = ({ product }: ProductProps) => {
       </Group>
 
       <BasicButton
+        disabled={!!isCreatedInCart}
         onClick={() => handleCreateCart(product._id)}
         fullWidth
         variant="filled"
-        text=" Add to Cart"
+        text={isCreatedInCart ? 'In Cart' : 'Add to Cart'}
         backGroundColor="blue"
         marginTop="md"
         radius="md"

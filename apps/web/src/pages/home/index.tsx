@@ -80,7 +80,7 @@ const Marketplace: NextPage = () => {
             setFilterPriceTo={setFilterPriceTo}
             setFilterPriceFrom={setFilterPriceFrom}
           />
-          <PaginationControls page={page} pagesCount={products?.pagesCount} setPage={setPage} />
+          <PaginationControls page={page} pagesCount={products?.products.pagesCount} setPage={setPage} />
         </Stack>
       </Group>
     </>

@@ -78,7 +78,7 @@ export const useGetMyProducts = (options = {}) =>
   });
 
 export const useGetProducts = <T>(options: T) =>
-  useQuery<ListResult<ProductResponce>>({
+  useQuery<{ products: ListResult<ProductResponce>; cartProductIds: string[] }>({
     queryKey: ['products', options],
     queryFn: () => apiService.get('/product/pagination', options),
     refetchInterval: 10000,

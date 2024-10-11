@@ -1,9 +1,11 @@
 import { z } from 'zod';
 
+import cartService from 'resources/cart/cart.service';
+
 import { validateMiddleware } from 'middlewares';
 import { stringUtil } from 'utils';
 
-import { paginationSchema, SaleStatus } from 'schemas';
+import { paginationSchema, PaymentStatus, SaleStatus } from 'schemas';
 import { AppKoaContext, AppRouter, NestedKeys, Product } from 'types';
 
 import productService from '../product.service';
@@ -24,6 +26,7 @@ const schema = paginationSchema.extend({
 type ValidatedData = z.infer<typeof schema>;
 
 async function handler(ctx: AppKoaContext<ValidatedData>) {
+  const { user } = ctx.state;
   const { page = 1, perPage = 5, sort, filter, searchValue } = ctx.validatedData;
 
   const filterOptions: { [key: string]: any }[] = [{ saleStatus: SaleStatus.ON_SALE }];
@@ -56,12 +59,19 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
       filterOptions.push({ [key]: value });
     });
   }
+  const cart = await cartService.find({
+    userId: user._id,
+    paymentStatus: PaymentStatus.INPROGRESS,
+  });
 
-  ctx.body = await productService.find(
-    { ...(filterOptions.length && { $and: filterOptions }) },
-    { page: +page, perPage: +perPage },
-    { sort },
-  );
+  ctx.body = {
+    products: await productService.find(
+      { ...(filterOptions.length && { $and: filterOptions }) },
+      { page: +page, perPage: +perPage },
+      { sort },
+    ),
+    cartProductIds: cart.results.map((c) => c.productId),
+  };
 }
 
 export default (router: AppRouter) => {
