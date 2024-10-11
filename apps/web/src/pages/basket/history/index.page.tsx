@@ -1,7 +1,7 @@
 import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import { Box, Table } from '@mantine/core';
+import { Box, Skeleton, Table } from '@mantine/core';
 
 import { useGetHistory } from 'resources/cart/cart.api';
 
@@ -18,7 +18,7 @@ const ths = (
 );
 
 const History: NextPage = () => {
-  const { data: history, isFetched } = useGetHistory();
+  const { data: history, isFetched, isLoading } = useGetHistory();
 
   if (isFetched && history && !history.length) {
     return <EmptyPage />;
@@ -34,10 +34,18 @@ const History: NextPage = () => {
 
       <Box>
         <Box w="70%" mt="30px">
-          <Table captionSide="bottom" w={1000}>
-            <Table.Thead>{ths}</Table.Thead>
-            <Table.Tbody>{rows}</Table.Tbody>
-          </Table>
+          {isLoading ? (
+            <>
+              {[1, 2, 3, 4, 5, 6].map((item) => (
+                <Skeleton key={`sklton-${String(item)}`} height={50} radius="sm" mb="sm" />
+              ))}
+            </>
+          ) : (
+            <Table captionSide="bottom" w={1000}>
+              <Table.Thead>{ths}</Table.Thead>
+              <Table.Tbody>{rows}</Table.Tbody>
+            </Table>
+          )}
         </Box>
       </Box>
     </>

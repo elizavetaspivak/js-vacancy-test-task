@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import { Box, Card, Flex, Group, Table, Text } from '@mantine/core';
+import { Box, Card, Flex, Group, Skeleton, Table, Text } from '@mantine/core';
 import { loadStripe } from '@stripe/stripe-js';
 
 import { CardResponce, useCheckoutCart, useGetCart } from 'resources/cart/cart.api';
@@ -27,7 +27,7 @@ const ths = (
 );
 
 const Cart: NextPage = () => {
-  const { data: carts, isFetched } = useGetCart();
+  const { data: carts, isFetched, isLoading } = useGetCart();
   const { mutateAsync: checkoutCart } = useCheckoutCart();
 
   const [totalPrice, setTotalPrice] = useState(0);
@@ -64,10 +64,18 @@ const Cart: NextPage = () => {
 
       <Flex justify="space-between" mt="30px">
         <Box w="70%">
-          <Table captionSide="bottom">
-            <Table.Thead>{ths}</Table.Thead>
-            <Table.Tbody>{rows}</Table.Tbody>
-          </Table>
+          {isLoading ? (
+            <>
+              {[1, 2, 3, 4, 5, 6].map((item) => (
+                <Skeleton key={`sklton-${String(item)}`} height={50} radius="sm" mb="sm" />
+              ))}
+            </>
+          ) : (
+            <Table captionSide="bottom">
+              <Table.Thead>{ths}</Table.Thead>
+              <Table.Tbody>{rows}</Table.Tbody>
+            </Table>
+          )}
         </Box>
         <Box>
           <Card w="100%" shadow="sm" padding="xs" radius="md" withBorder>

@@ -14,7 +14,7 @@ type ProductProps = {
 };
 
 export const Product = ({ product, cartProductIds }: ProductProps) => {
-  const { mutate: createCart } = useCreateCart();
+  const { mutate: createCart, isPending } = useCreateCart();
 
   const handleCreateCart = (id: string) => {
     createCart(
@@ -54,6 +54,7 @@ export const Product = ({ product, cartProductIds }: ProductProps) => {
         disabled={!!isCreatedInCart}
         onClick={() => handleCreateCart(product._id)}
         fullWidth
+        isLoading={isPending}
         variant="filled"
         text={isCreatedInCart ? 'In Cart' : 'Add to Cart'}
         backGroundColor="blue"

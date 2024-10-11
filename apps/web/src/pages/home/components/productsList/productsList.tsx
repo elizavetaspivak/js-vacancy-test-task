@@ -44,7 +44,7 @@ export const ProductsList = memo(
       <Group gap={20}>
         {isProductListLoading && (
           <>
-            {[1, 2, 3].map((item) => (
+            {[1, 2, 3, 4, 5, 6].map((item) => (
               <Skeleton key={`sklton-${String(item)}`} height={50} radius="sm" mb="sm" />
             ))}
           </>
