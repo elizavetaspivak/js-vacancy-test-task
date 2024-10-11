@@ -13,6 +13,7 @@ const schema = z.object({
   API_URL: z.string(),
   WS_URL: z.string(),
   WEB_URL: z.string(),
+  STRIPE_PK: z.string(),
   MIXPANEL_API_KEY: z.string().optional(),
 });
 
@@ -27,6 +28,7 @@ const processEnv = {
   API_URL: process.env.NEXT_PUBLIC_API_URL,
   WS_URL: process.env.NEXT_PUBLIC_WS_URL,
   WEB_URL: process.env.NEXT_PUBLIC_WEB_URL,
+  STRIPE_PK: process.env.NEXT_PUBLIC_STRIPE_PK,
   MIXPANEL_API_KEY: process.env.NEXT_PUBLIC_MIXPANEL_API_KEY,
 } as Record<keyof Config, string | undefined>;
 

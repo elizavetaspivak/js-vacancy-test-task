@@ -25,6 +25,10 @@ export type CardResponce = {
   paymentDate: string | null;
 };
 
+type CheckoutResponse = {
+  id: string;
+};
+
 export const useCreateCart = <T>() =>
   useMutation<CreateCartResponce, unknown, T>({
     mutationFn: (data: T) => apiService.post('/cart/create', data),
@@ -37,12 +41,28 @@ export const useGetCart = () =>
   useQuery<CardResponce[]>({
     queryKey: ['cart'],
     queryFn: () => apiService.get('/cart/list'),
+    refetchInterval: 10000,
+  });
+
+export const useGetHistory = () =>
+  useQuery<CardResponce[]>({
+    queryKey: ['history'],
+    queryFn: () => apiService.get('/cart/history'),
   });
 
 export const useGetCartCounts = () =>
   useQuery<number>({
     queryKey: ['cartCount'],
     queryFn: () => apiService.get('/cart/counts'),
+  });
+
+export const useCheckoutCart = () =>
+  useMutation<CheckoutResponse, unknown>({
+    mutationFn: () => apiService.post(`/cart/create-checkout-session`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cartCount'] });
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
+    },
   });
 
 export const useUpdateCart = <T extends { id: string; quantity: number }>() =>

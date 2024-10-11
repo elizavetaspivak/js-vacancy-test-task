@@ -81,4 +81,5 @@ export const useGetProducts = <T>(options: T) =>
   useQuery<ListResult<ProductResponce>>({
     queryKey: ['products', options],
     queryFn: () => apiService.get('/product/pagination', options),
+    refetchInterval: 10000,
   });

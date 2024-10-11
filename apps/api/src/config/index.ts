@@ -19,6 +19,10 @@ const schema = z.object({
   REDIS_ERRORS_POLICY: z.enum(['throw', 'log']).default('log'),
   ADMIN_KEY: z.string().optional(),
   MIXPANEL_API_KEY: z.string().optional(),
+  STRIPE_ENDPOINT_SECRET: z.string(),
+  STRIPE_KEY: z.string(),
+  STRIPE_SUCCESS_URL: z.string(),
+  STRIPE_CANCEL_URL: z.string(),
 });
 
 type Config = z.infer<typeof schema>;

@@ -1,0 +1,12 @@
+.imageBox{
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image{
+    object-position: center;
+    border-radius: 8px;
+}

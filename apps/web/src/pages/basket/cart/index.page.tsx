@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { Box, Card, Flex, Group, Table, Text } from '@mantine/core';
+import { loadStripe } from '@stripe/stripe-js';
 
-import { CardResponce, useGetCart } from 'resources/cart/cart.api';
+import { CardResponce, useCheckoutCart, useGetCart } from 'resources/cart/cart.api';
 
 import { BasicButton } from 'components/basic-button/basicButton';
+
+import config from 'config';
 
 import { SaleStatus } from 'schemas';
 
@@ -25,6 +28,7 @@ const ths = (
 
 const Cart: NextPage = () => {
   const { data: carts, isFetched } = useGetCart();
+  const { mutateAsync: checkoutCart } = useCheckoutCart();
 
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -33,6 +37,16 @@ const Cart: NextPage = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     price && setTotalPrice(price);
   }, [carts]);
+
+  const makePayment = async () => {
+    if (config.STRIPE_PK) {
+      const stripe = await loadStripe(config.STRIPE_PK);
+
+      const session = await checkoutCart();
+
+      await stripe?.redirectToCheckout({ sessionId: session.id });
+    }
+  };
 
   if (isFetched && carts && !carts.length) {
     return <EmptyPage />;
@@ -74,6 +88,7 @@ const Cart: NextPage = () => {
 
             <BasicButton
               disabled={isSomethingSold}
+              onClick={makePayment}
               fullWidth
               variant="filled"
               text="Proceed to Checkout"
