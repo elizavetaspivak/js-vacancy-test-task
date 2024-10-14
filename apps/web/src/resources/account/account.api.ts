@@ -37,6 +37,9 @@ export const useSignUp = <T = SignUpParams>() =>
       sendNotification('Success', 'Account created successfully', 'teal');
       router.replace(RoutePath.SignIn);
     },
+    onError: () => {
+      sendNotification('Error', 'User with this email is already registered', 'red');
+    },
   });
 
 export const useGet = (options = {}) =>

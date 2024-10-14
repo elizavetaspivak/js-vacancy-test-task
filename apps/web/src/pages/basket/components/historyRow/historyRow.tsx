@@ -27,6 +27,9 @@ const HistoryRow: NextPage<{ cart: CardResponce }> = ({ cart }) => {
       <Table.Td w="200px" align="center" mr="100px">
         <Box mr="60px">${cart.product.price * cart.quantity}</Box>
       </Table.Td>
+      <Table.Td w="200px" align="center" mr="100px">
+        <Box mr="60px">{cart.quantity}</Box>
+      </Table.Td>
       <Table.Td>
         {day}.{month < 10 ? `0${month}` : month}.{year.toString().slice(2)}
       </Table.Td>

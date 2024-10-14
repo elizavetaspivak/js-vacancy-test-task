@@ -1,9 +1,8 @@
 import { z } from 'zod';
 
-import cartService from 'resources/cart/cart.service';
-
 import { validateMiddleware } from 'middlewares';
 
+import { ProductStatus } from 'schemas';
 import { AppKoaContext, AppRouter, Next } from 'types';
 
 import productService from '../product.service';
@@ -19,7 +18,7 @@ type ValidatedData = z.infer<typeof schema>;
 async function validator(ctx: AppKoaContext<ValidatedData>, next: Next) {
   const { productId } = ctx.validatedData;
 
-  const isProductExists = await productService.exists({ _id: productId });
+  const isProductExists = await productService.exists({ _id: productId, productStatus: ProductStatus.ACTIVE });
 
   ctx.assertClientError(isProductExists, {
     productId: 'Product not found!',
@@ -31,13 +30,7 @@ async function validator(ctx: AppKoaContext<ValidatedData>, next: Next) {
 async function handler(ctx: AppKoaContext<ValidatedData>) {
   const { productId } = ctx.validatedData;
 
-  const isCartExists = await cartService.exists({ productId });
-
-  if (isCartExists) {
-    await cartService.deleteOne({ productId });
-  }
-
-  await productService.deleteOne({ _id: productId });
+  await productService.updateOne({ _id: productId }, () => ({ productStatus: ProductStatus.DELETED }));
 
   ctx.body = productId;
 

@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { validateMiddleware } from 'middlewares';
 import { uploadPhoto } from 'services/firebase-storage/firebase-storage.service';
 
-import { SaleStatus } from 'schemas';
+import { ProductStatus, SaleStatus } from 'schemas';
 import { AppKoaContext, AppRouter, Next } from 'types';
 
 import productService from '../product.service';
@@ -52,6 +52,7 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
       userId: user._id,
       imageUrl: photoUrl,
       fileReference: file.originalname,
+      productStatus: ProductStatus.ACTIVE,
     });
   }
 }

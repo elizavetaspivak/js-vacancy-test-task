@@ -5,7 +5,7 @@ import cartService from 'resources/cart/cart.service';
 import { validateMiddleware } from 'middlewares';
 import { stringUtil } from 'utils';
 
-import { paginationSchema, PaymentStatus, SaleStatus } from 'schemas';
+import { paginationSchema, PaymentStatus, ProductStatus, SaleStatus } from 'schemas';
 import { AppKoaContext, AppRouter, NestedKeys, Product } from 'types';
 
 import productService from '../product.service';
@@ -29,7 +29,9 @@ async function handler(ctx: AppKoaContext<ValidatedData>) {
   const { user } = ctx.state;
   const { page = 1, perPage = 5, sort, filter, searchValue } = ctx.validatedData;
 
-  const filterOptions: { [key: string]: any }[] = [{ saleStatus: SaleStatus.ON_SALE, userId: { $ne: user._id } }];
+  const filterOptions: { [key: string]: any }[] = [
+    { saleStatus: SaleStatus.ON_SALE, userId: { $ne: user._id }, productStatus: ProductStatus.ACTIVE },
+  ];
 
   if (searchValue) {
     const searchPattern = stringUtil.escapeRegExpString(searchValue as string);

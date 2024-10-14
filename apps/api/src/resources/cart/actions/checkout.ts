@@ -32,6 +32,11 @@ async function handler(ctx: AppKoaContext) {
       },
     },
     {
+      $match: {
+        'product.productStatus': 'active',
+      },
+    },
+    {
       $project: {
         productArray: 0,
         productId: 0,

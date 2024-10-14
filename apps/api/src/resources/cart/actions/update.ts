@@ -1,7 +1,10 @@
 import { z } from 'zod';
 
+import productService from 'resources/product/product.service';
+
 import { validateMiddleware } from 'middlewares';
 
+import { ProductStatus } from 'schemas';
 import { AppKoaContext, AppRouter, Next } from 'types';
 
 import cartService from '../cart.service';
@@ -18,9 +21,13 @@ type Request = {
 };
 
 async function validator(ctx: AppKoaContext<ValidatedData, Request>, next: Next) {
-  const isCartExists = await cartService.exists({ _id: ctx.request.params.id });
+  const cart = await cartService.findOne({ _id: ctx.request.params.id });
 
-  ctx.assertError(isCartExists, 'Product not found');
+  ctx.assertError(cart, 'Product not found');
+
+  const product = await productService.findOne({ _id: cart.productId });
+  ctx.assertError(product, 'Product not found');
+  ctx.assertError(product.productStatus === ProductStatus.ACTIVE, 'Product was deleted');
 
   await next();
 }

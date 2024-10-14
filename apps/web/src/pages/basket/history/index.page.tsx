@@ -12,6 +12,7 @@ const ths = (
   <Table.Tr c="#767676">
     <Table.Th>Item</Table.Th>
     <Table.Th>Unit Price</Table.Th>
+    <Table.Th>Quantity</Table.Th>
     <Table.Th>Date</Table.Th>
     <Table.Th />
   </Table.Tr>

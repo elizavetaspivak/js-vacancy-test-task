@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import { Box, Card, Flex, Group, Skeleton, Table, Text } from '@mantine/core';
+import { Box, Card, Divider, Flex, Group, Skeleton, Table, Text } from '@mantine/core';
 import { loadStripe } from '@stripe/stripe-js';
 
 import { CardResponce, useCheckoutCart, useGetCart } from 'resources/cart/cart.api';
@@ -10,7 +10,7 @@ import { BasicButton } from 'components/basic-button/basicButton';
 
 import config from 'config';
 
-import { SaleStatus } from 'schemas';
+import { ProductStatus, SaleStatus } from 'schemas';
 
 import CartRow from '../components/cartRow/cartRow';
 import EmptyPage from '../components/emptyPage/emptyPage';
@@ -28,7 +28,7 @@ const ths = (
 
 const Cart: NextPage = () => {
   const { data: carts, isFetched, isLoading } = useGetCart();
-  const { mutateAsync: checkoutCart } = useCheckoutCart();
+  const { mutateAsync: checkoutCart, isPending } = useCheckoutCart();
 
   const [totalPrice, setTotalPrice] = useState(0);
 
@@ -55,6 +55,7 @@ const Cart: NextPage = () => {
   const rows = carts?.map((element: CardResponce) => <CartRow key={element._id} cart={element} />);
 
   const isSomethingSold = carts?.some((cart) => cart.product.saleStatus === SaleStatus.SOLD);
+  const isSomethingDeleted = carts?.some((cart) => cart.product.productStatus === ProductStatus.DELETED);
 
   return (
     <>
@@ -78,13 +79,13 @@ const Cart: NextPage = () => {
           )}
         </Box>
         <Box>
-          <Card w="100%" shadow="sm" padding="xs" radius="md" withBorder>
+          <Card w="315px" shadow="sm" padding="xs" radius="md" p="lg" bd="1px solid black-100" withBorder>
             <Group justify="space-between" mt="xs" mb="xs">
               <Text className={classes.summary} fw={700}>
                 Summary
               </Text>
             </Group>
-
+            <Divider c="black-200" />
             <Group justify="space-between" mt="xs" mb="xs">
               <Text fw={500} className={classes.totalPrice} size="sm" c="dimmed">
                 Total price
@@ -95,8 +96,9 @@ const Cart: NextPage = () => {
             </Group>
 
             <BasicButton
-              disabled={isSomethingSold}
+              disabled={isSomethingSold || isSomethingDeleted}
               onClick={makePayment}
+              isLoading={isPending}
               fullWidth
               variant="filled"
               text="Proceed to Checkout"

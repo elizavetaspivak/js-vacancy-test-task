@@ -6,7 +6,7 @@ import { apiService } from 'services';
 
 import queryClient from 'query-client';
 
-import { SaleStatus } from 'schemas';
+import { ProductStatus, SaleStatus } from 'schemas';
 
 interface CreateCartResponce {
   productId: string;
@@ -21,6 +21,7 @@ export type CardResponce = {
     price: number;
     quantity: number;
     saleStatus: SaleStatus;
+    productStatus: ProductStatus;
   };
   paymentDate: string | null;
 };

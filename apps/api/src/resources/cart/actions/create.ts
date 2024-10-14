@@ -4,7 +4,7 @@ import productService from 'resources/product/product.service';
 
 import { validateMiddleware } from 'middlewares';
 
-import { PaymentStatus } from 'schemas';
+import { PaymentStatus, ProductStatus } from 'schemas';
 import { AppKoaContext, AppRouter, Next, User } from 'types';
 
 import cartService from '../cart.service';
@@ -28,7 +28,7 @@ interface Request {
 async function validator(ctx: AppKoaContext<ValidatedData, Request>, next: Next) {
   const { productId } = ctx.request.body;
 
-  const isProductExists = await productService.exists({ _id: productId });
+  const isProductExists = await productService.exists({ _id: productId, productStatus: ProductStatus.ACTIVE });
 
   ctx.assertError(isProductExists, 'Product not found');
 

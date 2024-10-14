@@ -7,7 +7,7 @@ import { CardResponce, useRemoveCart, useUpdateCart } from 'resources/cart/cart.
 
 import { sendNotification } from 'components/notifications/notification';
 
-import { SaleStatus } from 'schemas';
+import { ProductStatus, SaleStatus } from 'schemas';
 
 import classes from './cartRow.module.css';
 
@@ -38,6 +38,11 @@ const CartRow: NextPage<{ cart: CardResponce }> = ({ cart }) => {
             {cart.product.saleStatus === SaleStatus.SOLD && (
               <Text size="xs" c="red">
                 Product is out. Remove to proceed.
+              </Text>
+            )}
+            {cart.product.productStatus === ProductStatus.DELETED && (
+              <Text size="xs" c="red">
+                Product was deleted. Remove to proceed.
               </Text>
             )}
           </Box>

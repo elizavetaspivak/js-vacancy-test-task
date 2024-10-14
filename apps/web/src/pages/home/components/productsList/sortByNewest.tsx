@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ActionIcon, Box, Flex, Pill, Stack } from '@mantine/core';
 import { SortDirection } from '@tanstack/react-table';
 
 import { ProductResponce } from 'resources/product/product.api';
 
 import { SortArrowIcon } from 'components/icons/sortArrowIcon';
+import { SortArrowUpIcon } from 'components/icons/sortArrowUpIcon';
 import { SortIcon } from 'components/icons/sortIcon';
 
 import { ListResult } from 'types';
@@ -30,8 +31,10 @@ export const SortByNewest = ({
   sorting,
   setSorting,
 }: SortByNewestProps) => {
+  const [sort, setSort] = useState('asc');
   const handleSort = () => {
     setSorting(sorting === 'asc' ? 'desc' : 'asc');
+    setSort(sort === 'asc' ? 'desc' : 'asc');
   };
 
   return (
@@ -41,14 +44,12 @@ export const SortByNewest = ({
 
         <Stack>
           <Flex justify="start">
-            <Box w="20px" mr="5px">
+            <Box w="20px" mr="5px" mt="2px">
               <SortIcon />
             </Box>
             <Box>Sort by newest</Box>
             <ActionIcon variant="transparent" color="gray" aria-label="Settings" onClick={handleSort}>
-              <Box w="16px">
-                <SortArrowIcon />
-              </Box>
+              <Box w="16px">{sort === 'asc' ? <SortArrowIcon /> : <SortArrowUpIcon />}</Box>
             </ActionIcon>
           </Flex>
         </Stack>

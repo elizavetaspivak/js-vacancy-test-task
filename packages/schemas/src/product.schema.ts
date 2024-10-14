@@ -7,6 +7,11 @@ export enum SaleStatus {
   ON_SALE = 'onSale',
 }
 
+export enum ProductStatus {
+  ACTIVE = 'active',
+  DELETED = 'deleted',
+}
+
 export const productSchema = dbSchema
   .extend({
     title: z.string(),
@@ -16,6 +21,7 @@ export const productSchema = dbSchema
     userId: z.string(),
 
     imageUrl: z.string(),
+    productStatus: z.nativeEnum(ProductStatus),
     saleStatus: z.nativeEnum(SaleStatus),
     fileReference: z.string(),
   })

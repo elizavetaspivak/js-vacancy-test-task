@@ -15,12 +15,13 @@ const endpointSecret = config.STRIPE_ENDPOINT_SECRET;
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const stripe = require('stripe')(config.STRIPE_KEY);
 
-const updateProducts = async (productIds: string[]) => {
-  for (const id of productIds) {
+const updateProducts = async (product: { productId: string; productQuantity: number }[]) => {
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < product.length; i++) {
     // eslint-disable-next-line no-await-in-loop
-    await productService.updateOne({ _id: id }, (el) => ({
-      quantity: el.quantity - 1 <= 0 ? 0 : el.quantity - 1,
-      saleStatus: el.quantity - 1 <= 0 ? SaleStatus.SOLD : SaleStatus.ON_SALE,
+    await productService.updateOne({ _id: product[i].productId }, (el) => ({
+      quantity: el.quantity - product[i].productQuantity <= 0 ? 0 : el.quantity - product[i].productQuantity,
+      saleStatus: el.quantity - product[i].productQuantity <= 0 ? SaleStatus.SOLD : SaleStatus.ON_SALE,
     }));
   }
 };
@@ -47,9 +48,9 @@ async function handler(ctx: AppKoaContext) {
           paymentStatus: PaymentStatus.INPROGRESS,
         });
 
-        const productIds = carts.results.map((cart) => cart.productId);
+        const products = carts.results.map((cart) => ({ productId: cart.productId, productQuantity: cart.quantity }));
 
-        await updateProducts(productIds);
+        await updateProducts(products);
 
         await cartService.updateMany(
           { userId: intent.client_reference_id, paymentStatus: PaymentStatus.INPROGRESS },
