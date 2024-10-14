@@ -35,6 +35,7 @@ export const createSchema = z.object({
       required_error: 'Cannot be empty',
       description: 'Cannot be empty',
     })
+    .positive('Number needs to be greater than 0')
     .min(1, 'Cannot be empty'),
   quantity: z
     .number({
@@ -42,5 +43,6 @@ export const createSchema = z.object({
       required_error: 'Cannot be empty',
       description: 'Cannot be empty',
     })
+    .positive('Number needs to be greater than 0')
     .min(1, 'Cannot be empty'),
 });
